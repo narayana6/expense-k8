@@ -5,7 +5,7 @@ metadata:
   namespace: expense
 data:
   #DB_HOST: mysql # mysql component service name
-  DB_HOST: db-dev.bnsaws.online
+  DB_HOST: mysql
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -33,33 +33,9 @@ spec:
         tier: app
     spec:
       initContainers:
-      - name: init-myservice
-        image: busybox:1.28
-        command: ['sh', '-c', "until nslookup db-dev.bnsaws.online; do echo waiting for myservice; sleep 2; done"]
       containers:
       - name: backend
         image: bns17/backend:v1.0
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "150m"
-            memory: "256Mi"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8080
-          failureThreshold: 2
-          periodSeconds: 5
-          initialDelaySeconds: 30
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 8080
-          failureThreshold: 2
-          periodSeconds: 5
-          initialDelaySeconds: 30
         envFrom:
         - configMapRef:
             name: backend
