@@ -3,4 +3,4 @@
 
 ** **
 
-![alt text](image.png)
+![Architecture Diagram](./expense-k8.drawio.png)
